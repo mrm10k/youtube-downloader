@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 # Función para actualizar la barra de progreso y la velocidad de descarga
 def actualizar_progreso(progreso, velocidad):
     progress_bar['value'] = progreso
-    label_velocidad.config(text=f"Velocidad de descarga: {velocidad}")
+    label_velocidad.config(text=f"Download speed: {velocidad}")
     ventana.update_idletasks()
 
 
@@ -16,15 +16,15 @@ def actualizar_progreso(progreso, velocidad):
 def descargar_video(url, ruta_descarga, calidad):
     try:
         # Comando para ejecutar yt-dlp con el formato adecuado según la calidad seleccionada
-        if calidad == "Solo audio":
+        if calidad == "Audio only":
             # Descargar solo el audio y convertir a MP3
             comando = ['yt-dlp', '-f', 'bestaudio', '--extract-audio', '--audio-format', 'mp3', 
                        '--audio-quality', '0', '--newline', '-o', f'{ruta_descarga}/%(title)s.%(ext)s', url]
         else:
             # Descargar video en la mejor calidad posible y convertir a MP4
-            if calidad == "Baja resolución (360p)":
+            if calidad == "Low quality (360p)":
                 formato = "bestvideo[height<=360]+bestaudio"
-            elif calidad == "Media resolución (720p)":
+            elif calidad == "Medium quality (720p)":
                 formato = "bestvideo[height<=720]+bestaudio"
             else:  # Máxima resolución
                 formato = "bestvideo+bestaudio"
@@ -37,7 +37,7 @@ def descargar_video(url, ruta_descarga, calidad):
         for linea in proceso.stdout:
             if "Downloading" in linea:
                 progress_bar['value'] = 0
-                label_velocidad.config(text="Velocidad de descarga: 0 B/s")
+                label_velocidad.config(text="Download speed: 0 B/s")
                 ventana.update_idletasks()
             elif "%" in linea:
                 # Extrae el porcentaje y la velocidad de la línea de salida de yt-dlp
@@ -53,14 +53,14 @@ def descargar_video(url, ruta_descarga, calidad):
                     
                     actualizar_progreso(progreso, velocidad)
                 except Exception as e:
-                    print(f"Error al analizar la línea: {linea}. Error: {e}")
+                    print(f"Error analyzing line: {linea}. Error: {e}")
         
         proceso.wait()
         actualizar_progreso(100, "0 B/s")
         return True  # Indica que la descarga fue exitosa
     
     except Exception as e:
-        messagebox.showerror("Error", f"Ha ocurrido un error: {e}")
+        messagebox.showerror("Error", f"An error occurred: {e}")
         return False  # Indica que hubo un error
 
 # Función para manejar la descarga de la lista de videos
@@ -70,23 +70,23 @@ def descargar_lista_videos():
     calidad = calidad_var.get()  # Obtener la calidad seleccionada
 
     if not urls:
-        messagebox.showerror("Error", "Por favor ingresa al menos una URL de YouTube.")
+        messagebox.showerror("Error", "Please introduce a YouTube URL.")
         return
 
     if not ruta_descarga:
-        messagebox.showerror("Error", "Por favor selecciona una ruta de descarga.")
+        messagebox.showerror("Error", "Please introduce a download route.")
         return
 
     # Descargar cada video en la lista de URLs
     for idx, url in enumerate(urls, 1):
-        label_status.config(text=f"Descargando video {idx} de {len(urls)} en {calidad}...")
+        label_status.config(text=f"Downloading {idx} of {len(urls)} in {calidad}...")
         descargado = descargar_video(url, ruta_descarga, calidad)
         if descargado:
-            label_status.config(text=f"Video {idx} descargado con éxito.")
+            label_status.config(text=f"Video {idx} downloaded succesfully.")
         else:
-            label_status.config(text=f"Error al descargar el video {idx}.")
+            label_status.config(text=f"Error downloading the video {idx}.")
     
-    label_status.config(text="Descargas completadas.")
+    label_status.config(text="Downloading completed.")
 
 # Función para seleccionar la ruta de descarga
 def seleccionar_ruta():
@@ -102,14 +102,14 @@ ventana.geometry("500x500")
 ventana.minsize(600, 600)  # Establecer el tamaño mínimo de la ventana
 
 # Etiqueta y campo para ingresar las URLs de videos
-label_urls = tk.Label(ventana, text="Ingresa las URLs de los videos de YouTube (una por línea):")
+label_urls = tk.Label(ventana, text="Introduce the YouTube URL (one per line):")
 label_urls.pack(pady=10)
 
 text_urls = tk.Text(ventana, height=10, width=50)
 text_urls.pack(pady=5)
 
 # Etiqueta y campo para ingresar la ruta de descarga
-label_ruta = tk.Label(ventana, text="Selecciona la ruta de descarga:")
+label_ruta = tk.Label(ventana, text="Select a download route:")
 label_ruta.pack(pady=10)
 
 frame_ruta = tk.Frame(ventana)
@@ -118,15 +118,15 @@ frame_ruta.pack(pady=5)
 entry_ruta = tk.Entry(frame_ruta, width=40)
 entry_ruta.pack(side=tk.LEFT)
 
-boton_seleccionar_ruta = tk.Button(frame_ruta, text="Seleccionar", command=seleccionar_ruta)
+boton_seleccionar_ruta = tk.Button(frame_ruta, text="Select", command=seleccionar_ruta)
 boton_seleccionar_ruta.pack(side=tk.LEFT, padx=5)
 
 # Menú desplegable para seleccionar la calidad de descarga
-label_calidad = tk.Label(ventana, text="Selecciona la calidad de descarga:")
+label_calidad = tk.Label(ventana, text="Select donwload quality:")
 label_calidad.pack(pady=10)
 
-calidad_var = tk.StringVar(value="Máxima resolución")
-opciones_calidad = ["Solo audio", "Baja resolución (360p)", "Media resolución (720p)", "Máxima resolución"]
+calidad_var = tk.StringVar(value="Max quality")
+opciones_calidad = ["Audio only", "Low quality (360p)", "Mid quality (720p)", "Max quality"]
 menu_calidad = ttk.Combobox(ventana, textvariable=calidad_var, values=opciones_calidad)
 menu_calidad.pack(pady=5)
 
@@ -135,15 +135,15 @@ progress_bar = ttk.Progressbar(ventana, orient='horizontal', length=300, mode='d
 progress_bar.pack(pady=20)
 
 # Etiqueta para mostrar la velocidad de descarga
-label_velocidad = tk.Label(ventana, text="Velocidad de descarga: 0 B/s")
+label_velocidad = tk.Label(ventana, text="Download speed: 0 B/s")
 label_velocidad.pack(pady=5)
 
 # Etiqueta para mostrar el estado de la descarga
-label_status = tk.Label(ventana, text="Estado: Esperando a iniciar...")
+label_status = tk.Label(ventana, text="State: Waiting for start...")
 label_status.pack(pady=5)
 
 # Botón para descargar la lista de videos
-boton_descargar = tk.Button(ventana, text="Descargar Lista de Videos", command=lambda: threading.Thread(target=descargar_lista_videos).start())
+boton_descargar = tk.Button(ventana, text="Download video list", command=lambda: threading.Thread(target=descargar_lista_videos).start())
 boton_descargar.pack(pady=10)
 
 # Iniciar el loop principal de la ventana
