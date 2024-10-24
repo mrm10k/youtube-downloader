@@ -6,7 +6,7 @@ A python coded program that allows to download the audio or the video from a You
 - [Dependencies](#Dependencies)
 - [Installation](#Installation)
 - [Usage](#Usage)
-- [Error handling](#Error handling)
+- [Error handling](#Errors)
 
 ---
 ## Dependencies
@@ -42,6 +42,6 @@ For **Linux**
 4. Click on **Download**
 
 ---
-## Error handling
+## Errors
 - Ensure the YouTube URLs are **one per line**.
 - Make sure that the download folder is valid.
