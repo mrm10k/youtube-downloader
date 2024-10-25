@@ -17,7 +17,7 @@ Open the cmd as admin, move to the directory where **requirements.txt** is locat
 
 ---
 ## Installation
-For **Windows**
+For **Windows**<br />
 Just download the [latest release](https://github.com/mrm10k/youtube-downloader/releases/tag/v1.0) and execute the `.exe` file, windows will mark it like harmful software, but this is just because it isn't certified, just click on **More information** and then **Execute it anyways**.
 ##
 For **Linux**
