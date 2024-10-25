@@ -22,9 +22,11 @@ Just download the latest [release](https://github.com/mrm10k/youtube-downloader/
 ##
 For **Linux**
 1. Clone this repository:
-``git clone https://github.com/mrm10k/youtube-downloader.git
-cd youtube-downloader``
-3. Ensure that all the dependencies are installed.
+```
+git clone https://github.com/mrm10k/youtube-downloader.git
+cd youtube-downloader
+```
+4. Ensure that all the dependencies are installed.
 
 ---
 ## Usage 
